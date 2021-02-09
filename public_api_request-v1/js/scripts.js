@@ -1,5 +1,6 @@
 const employeeDiv  = document.getElementById('gallery');
 const employeeList  = [];
+const modalBtn = document.getElementById('modal-close-btn')
 
 fetch('https://randomuser.me/api/?results=12')
     .then(checkStatus)
@@ -22,7 +23,7 @@ function generateEmployees(employees) {
         const html = `
             <div class="card">
                 <div class="card-img-container">
-                    <img class="card-img" src="${employee.picture.small}" alt="profile picture">
+                    <img class="card-img" src="${employee.picture.medium}" alt="profile picture">
                 </div>
                 <div class="card-info-container">
                     <h3 id="name" class="card-name cap">${employee.name.first} ${employee.name.last}</h3>
@@ -36,11 +37,11 @@ function generateEmployees(employees) {
 }
 
 //employeeList = the employees/ if  email matches then create card
-function generateModal(email) {
-    for (let i=0; i<employeeList; i++) {
-        if (email === employeeList[i]) {
+function generateModal(srcUrl) {
+    for (let i=0; i<employeeList.length; i++) {
+        if (srcUrl === employeeList[i].picture.medium) {
             const dob = new Date (employeeList[i].dob.date)
-            
+      //clean up modal display with better documentation!      
             const html =  `
                             <div class="modal-container">
                                 <div class="modal">
@@ -57,11 +58,28 @@ function generateModal(email) {
                                     </div>
                                 </div>
                             </div> 
-                        `
-        }
-    }
+                        `;
+            employeeDiv.insertAdjacentHTML('beforeend', html);
+        } 
+    } 
 }
 
 employeeDiv.addEventListener('click', e => {
-    console.log(e.target);
+
+    console.log(e.target.tagName);
+    if(e.target.tagName === 'STRONG' || e.target.tagName === 'BUTTON') {
+        const container = document.querySelector('.modal-container');
+        container.remove();
+        
+    } else if(e.target.tagName !== 'STRONG' && e.target.tagName !== 'BUTTON') {
+        if (employeeDiv.contains(e.target)) {
+            const cardDiv = e.target.closest('.card');
+            if (cardDiv) {
+                const imgEl = cardDiv.firstElementChild.firstElementChild;
+                const img  = imgEl.src;
+                generateModal(img)
+            } 
+        }
+    }
 })
+
