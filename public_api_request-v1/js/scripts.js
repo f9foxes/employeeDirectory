@@ -1,3 +1,5 @@
+//clean up modal display with better documentation! and consoles     
+
 const employeeDiv  = document.getElementById('gallery');
 const employeeList  = [];
 const modalBtn = document.getElementById('modal-close-btn')
@@ -36,12 +38,18 @@ function generateEmployees(employees) {
     })
 }
 
-//employeeList = the employees/ if  email matches then create card
+//Checks for a matching img url from employeeList to add info for modal container.
 function generateModal(srcUrl) {
     for (let i=0; i<employeeList.length; i++) {
         if (srcUrl === employeeList[i].picture.medium) {
-            const dob = new Date (employeeList[i].dob.date)
-      //clean up modal display with better documentation!      
+            console.log(employeeList[i]);
+            const dob = new Date(employeeList[i].dob.date);
+            const day = dob.getDate();
+            const month = dob.getMonth()+1;
+            const year = dob.getFullYear();
+            const bDay = `${month}/${day}/${year}`;
+            const cell =  employeeList[i].cell.replace(/\D+/g, '')
+                            .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
             const html =  `
                             <div class="modal-container">
                                 <div class="modal">
@@ -52,9 +60,9 @@ function generateModal(srcUrl) {
                                         <p class="modal-text">${employeeList[i].email}</p>
                                         <p class="modal-text cap">${employeeList[i].location.city}</p>
                                         <hr>
-                                        <p class="modal-text">${employeeList[i].name.phone}</p>
+                                        <p class="modal-text">Cell: ${cell}</p>
                                         <p class="modal-text">${employeeList[i].location.street.number} ${employeeList[i].location.street.name}, ${employeeList[i].location.city}, ${employeeList[i].location.state} ${employeeList[i].location.postcode}</p>
-                                        <p class="modal-text">Birthday: ${dob}</p>
+                                        <p class="modal-text">Birthday: ${bDay}</p>
                                     </div>
                                 </div>
                             </div> 
@@ -65,21 +73,18 @@ function generateModal(srcUrl) {
 }
 
 employeeDiv.addEventListener('click', e => {
-
-    console.log(e.target.tagName);
+    // Remove Modal Container when button clicked.
     if(e.target.tagName === 'STRONG' || e.target.tagName === 'BUTTON') {
         const container = document.querySelector('.modal-container');
-        container.remove();
-        
-    } else if(e.target.tagName !== 'STRONG' && e.target.tagName !== 'BUTTON') {
-        if (employeeDiv.contains(e.target)) {
-            const cardDiv = e.target.closest('.card');
-            if (cardDiv) {
-                const imgEl = cardDiv.firstElementChild.firstElementChild;
-                const img  = imgEl.src;
-                generateModal(img)
-            } 
-        }
+        container.remove();      
+    //Pass the img url from img src of e.target card into the generateModal function as an argument.
+    } else  if (employeeDiv.contains(e.target)){
+                const cardDiv = e.target.closest('.card');
+                if (cardDiv) {
+                    const imgEl = cardDiv.firstElementChild.firstElementChild;
+                    const img  = imgEl.src;
+                    generateModal(img)
+                } 
     }
 })
 
