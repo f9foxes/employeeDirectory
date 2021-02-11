@@ -26,7 +26,7 @@ function generateEmployees(employees) {
         const html = `
             <div class="card">
                 <div class="card-img-container">
-                    <img class="card-img" src="${employee.picture.medium}" alt="profile picture">
+                    <img class="card-img" src="${employee.picture.large}" alt="profile picture">
                 </div>
                 <div class="card-info-container">
                     <h3 id="name" class="card-name cap">${employee.name.first} ${employee.name.last}</h3>
@@ -42,7 +42,7 @@ function generateEmployees(employees) {
 //Generates and displays a modal container of the employee card that was clicked
 function generateModal(srcUrl) {
     for (let i=0; i<employeeList.length; i++) {
-        if (srcUrl === employeeList[i].picture.medium) {
+        if (srcUrl === employeeList[i].picture.large) {
             const dob = new Date(employeeList[i].dob.date);
             const day = dob.getDate();
             const month = dob.getMonth()+1;
@@ -55,7 +55,7 @@ function generateModal(srcUrl) {
                                 <div class="modal">
                                     <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
                                     <div class="modal-info-container">
-                                        <img class="modal-img" src="${employeeList[i].picture.medium}" alt="profile picture">
+                                        <img class="modal-img" src="${employeeList[i].picture.large}" alt="profile picture">
                                         <h3 id="name" class="modal-name cap">${employeeList[i].name.first} ${employeeList[i].name.last}</h3>
                                         <p class="modal-text">${employeeList[i].email}</p>
                                         <p class="modal-text cap">${employeeList[i].location.city}</p>
